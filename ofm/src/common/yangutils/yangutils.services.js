@@ -2630,11 +2630,11 @@ define(['common/yangutils/yangutils.module'], function (yangUtils) {
             var storages = [];
             if(nodeUtils.isRootNode(node.type)) {
                 if(node.type === 'rpc') {
-                    storages.push('operations');
+                    storages.push('data');
                 } else {
-                    storages.push('operational');
+                    storages.push('data');
                     if(isConfigNode(node)) {
-                        storages.push('config');
+                        storages.push('data');
                     }
                 }
             }

@@ -18,7 +18,7 @@ define(['app/openflow_manager/modal/modaldelete.module', 'app/openflow_manager/m
                         var reqData = OpenFlowManagerUtils.getReqDataForDeleteOperationalFlow(flow, flow.data.table_id);
 
                         return {'name' : labelCbk(flow), 
-                                'url' : OpenFlowManagerConfigRestangular.configuration.baseUrl + (flow.operational === 2 ? '/restconf/operations/sal-flow:remove-flow' : '/restconf/config/opendaylight-inventory:nodes/node/'+flow.device+'/table/'+flow.data.table_id+'/flow/'+flow.data.id),
+                                'url' : OpenFlowManagerConfigRestangular.configuration.baseUrl + (flow.operational === 2 ? '/restconf/data/sal-flow:remove-flow' : '/restconf/data/opendaylight-inventory:nodes/node/'+encodeURIComponent(flow.device)+'/table='+flow.data.table_id+'/flow='+flow.data.id),
                                 'data' : flow.operational === 2 ? reqData : ''
                               };
                   });

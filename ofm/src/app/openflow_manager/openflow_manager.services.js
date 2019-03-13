@@ -1734,7 +1734,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
       };
 
       utils.sendFlow = function(device, table, flow, flowData, successCbk, errorCbk) {
-          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('config').one('opendaylight-inventory:nodes').one('node', device).one('table', table).one('flow', flow),
+          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data').one('opendaylight-inventory:nodes').one('node='+encodeURIComponent(device)).one('table='+table).one('flow='+flow),
               checkNecesseryProps = function(data, props){
                 props.forEach(function(prop){
                   data.flow[0][prop.name] = data.flow[0][prop.name] ? data.flow[0][prop.name] : prop.value;
@@ -1759,7 +1759,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
       };
 
       utils.deleteFlow = function(device, table, flow, successCbk, errorCbk){
-          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('config').one('opendaylight-inventory:nodes').one('node', device).one('table', table).one('flow', flow);
+          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data').one('opendaylight-inventory:nodes').one('node='+encodeURIComponent(device)).one('table='+table).one('flow='+flow);
 
           restObj.remove().then(function(data) {
               successCbk(data);
@@ -1773,12 +1773,12 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
                     match: flow.data.match,
                     table_id: tableId,
                     priority: flow.data.priority,
-                    node : "/opendaylight-inventory:nodes/opendaylight-inventory:node[opendaylight-inventory:id='" + flow.device +"']"}
+                    node : "/opendaylight-inventory:nodes/opendaylight-inventory:node[opendaylight-inventory:id='" + encodeURIComponent(flow.device) +"']"}
                   };
       };
 
       utils.deleteFlowOperational = function(flow, tableId, flowId, successCbk, errorCbk){
-          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('operations'),
+          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data'),
               reqData = utils.getReqDataForDeleteOperationalFlow(flow, tableId);
 
           restObj.post('sal-flow:remove-flow', reqData).then(function(data) {
@@ -1789,7 +1789,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
       };
 
       utils.getAllStatistics = function(successCbk, errorCbk, type) {
-          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('operational').one('opendaylight-inventory:nodes');
+          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data').one('opendaylight-inventory:nodes');
 
           restObj.get().then(function(data) {
               successCbk(data.nodes.node);
@@ -1799,7 +1799,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
       };
 
       utils.getFlowsNetwork = function(successCbk, errorCbk) {
-          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('config').one('opendaylight-inventory:nodes');
+          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data').one('opendaylight-inventory:nodes');
 
           restObj.get().then(function(data) {
               successCbk(FlowProcessor.network(data.nodes.node));
@@ -1809,7 +1809,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
       };
 
       utils.getOperFlowsNetwork = function(deviceFilter, successCbk, errorCbk) {
-          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('operational').one('opendaylight-inventory:nodes');
+          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data').one('opendaylight-inventory:nodes');
 
           restObj.get().then(function(data) {
               successCbk(FlowProcessor.networkOperational(data.nodes.node, deviceFilter));
@@ -1819,7 +1819,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
       };
 
       utils.mapFlowsOperational = function(configFlows, deviceFilter, successCbk, errorCbk) {
-          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('operational').one('opendaylight-inventory:nodes'),
+          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data').one('opendaylight-inventory:nodes'),
               isInOperational = function(device_id, operflow) {
                   var flow = configFlows.filter(function(cf) {
                           return cf.data.id === operflow.id && cf.data.table_id === operflow.table_id && cf.device === device_id;
@@ -1845,7 +1845,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
       };
 
       utils.getDevices = function(successCbk, errorCbk) {
-          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('operational').one('opendaylight-inventory:nodes');
+          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data').one('opendaylight-inventory:nodes');
 
           var setAdditionalProperties = function(nodes) {
               return nodes.map(function(node) {
@@ -1925,7 +1925,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
       };
 
       utils.getTopologyData = function(successCbk, errorCbk){
-          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('operational').one('network-topology:network-topology');
+          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data').one('network-topology:network-topology');
 
           restObj.get().then(function(data) {
             successCbk(utils.transformTopologyData(data, function(topology){
@@ -1956,7 +1956,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
       // Description:
       //    Function for getting host data from topology
       utils.getHostData = function(successCbk, errorCbk){
-        var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('operational').one('network-topology:network-topology'),
+        var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data').one('network-topology:network-topology'),
             filteredHostData = function(data){
                 var filteredData = [],
                     topology = (data['network-topology'] && data['network-topology'].topology) ? data['network-topology'].topology : [],
@@ -1996,7 +1996,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
       // Description:
       //    Function checks version of open flow protocol for specific device and calls appropriate callback.
       utils.getDeviceVersion = function(deviceId, successCbk, errorCbk) {
-          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('operations'),
+          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data'),
               reqData = {input : {node : "/opendaylight-inventory:nodes/opendaylight-inventory:node[opendaylight-inventory:id='" + deviceId +"']"}};
 
           restObj.post('of-switch-version-provider:get-version', reqData).then(function(data) {
@@ -2008,7 +2008,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
       };
 
       utils.getDeploymentMode = function(successCbk, errorCbk) {
-          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('operations'),
+          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data'),
               reqData = 'null';
 
           restObj.post('deployment-mode:get-deployment-mode', reqData).then(function(data) {
@@ -2026,7 +2026,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
       };
 
       utils.getDeviceDeploymentMode = function(deviceId, successCbk, errorCbk) {
-          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('operations'),
+          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data'),
               reqData = {input : {node : "/opendaylight-inventory:nodes/opendaylight-inventory:node[opendaylight-inventory:id='" + deviceId +"']"}};
 
           restObj.post('node-deployment-mode:get-node-deployment-mode', reqData).then(function(data) {
@@ -2038,7 +2038,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
       };
 
       utils.changeCtrlDeploymentMode = function(mode, successCbk, errorCbk) {
-          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('operations'),
+          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data'),
               reqData = {input : {"deployment-mode": mode}};
 
           restObj.post('deployment-mode:set-deployment-mode', reqData).then(function(data) {
@@ -2051,7 +2051,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
       };
 
       utils.changeDeviceDeploymentMode = function(mode, deviceId, successCbk, errorCbk) {
-          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('operations'),
+          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data'),
               reqData = {input : {node : "/opendaylight-inventory:nodes/opendaylight-inventory:node[opendaylight-inventory:id='" + deviceId +"']", "deployment-mode": mode}};
 
           restObj.post('node-deployment-mode:set-node-deployment-mode', reqData).then(function(data) {
@@ -2085,7 +2085,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
       };
 
       utils.getStatisticsSettings = function(successCbk, errorCbk){
-          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('config').one('opendaylight-inventory:nodes').one('node').one('controller-config').one('yang-ext:mount').one('config:modules').one('module').one('statistics-manager:statistics-manager').one('statistics-manager');
+          var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data').one('opendaylight-inventory:nodes').one('node').one('controller-config').one('yang-ext:mount').one('config:modules').one('module').one('statistics-manager:statistics-manager').one('statistics-manager');
 
           restObj.get().then(function(data){
               console.debug('got stats', data);
@@ -2097,7 +2097,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
 
       utils.changeStatistics = function(value, successCbk, errorCbk){
           var valueMiliseconds = value * 1000,
-              restObj = OpenFlowManagerConfigRestangular.one('restconf').one('config').one('opendaylight-inventory:nodes').one('node').one('controller-config').one('yang-ext:mount'),
+              restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data').one('opendaylight-inventory:nodes').one('node').one('controller-config').one('yang-ext:mount'),
               reqData = '<module xmlns="urn:opendaylight:params:xml:ns:yang:controller:config">'+
                           '<type xmlns:prefix="urn:opendaylight:params:xml:ns:yang:controller:md:sal:statistics-manager">prefix:statistics-manager</type>'+
                           '<name>statistics-manager</name>'+
