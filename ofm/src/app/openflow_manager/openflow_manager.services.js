@@ -1792,7 +1792,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
           var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data').one('opendaylight-inventory:nodes');
 
           restObj.get().then(function(data) {
-              successCbk(data.nodes.node);
+              successCbk(data["opendaylight-inventory:nodes"].node);
           }, function(res) {
               errorCbk(res.data, res.status);
           });
@@ -1802,7 +1802,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
           var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data').one('opendaylight-inventory:nodes');
 
           restObj.get().then(function(data) {
-              successCbk(FlowProcessor.network(data.nodes.node));
+              successCbk(FlowProcessor.network(data["opendaylight-inventory:nodes"].node));
           }, function(res) {
               errorCbk(res.data, res.status);
           });
@@ -1812,7 +1812,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
           var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data').one('opendaylight-inventory:nodes');
 
           restObj.get().then(function(data) {
-              successCbk(FlowProcessor.networkOperational(data.nodes.node, deviceFilter));
+              successCbk(FlowProcessor.networkOperational(data["opendaylight-inventory:nodes"].node, deviceFilter));
           }, function(res) {
               errorCbk(res.data, res.status);
           });
@@ -1838,7 +1838,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
               };
 
           restObj.get().then(function(data) {
-              successCbk(getAllFlows(data.nodes.node));
+              successCbk(getAllFlows(data["opendaylight-inventory:nodes"].node));
           }, function(res) {
             errorCbk(res.data, res.status);
           });
@@ -1874,7 +1874,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
           };
 
           restObj.get().then(function(data) {
-              var devices = data.nodes.node,
+              var devices = data["opendaylight-inventory:nodes"].node,
                   excluded = excludeMountedDevices(devices),
                   modified = setAdditionalProperties(excluded);
 
@@ -1901,8 +1901,8 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
               };
 
 
-          if (data['network-topology'] && data['network-topology'].topology.length) {
-              var topoData = callback ? callback(data['network-topology'].topology) : data['network-topology'].topology[0],
+          if (data['network-topology:network-topology'] && data['network-topology:network-topology'].topology.length) {
+              var topoData = callback ? callback(data['network-topology:network-topology'].topology) : data['network-topology:network-topology'].topology[0],
                   nodeId = 0,
                   linkId = 0;
 
@@ -1959,7 +1959,7 @@ define(['app/openflow_manager/openflow_manager.module'], function(openFlowManage
         var restObj = OpenFlowManagerConfigRestangular.one('restconf').one('data').one('network-topology:network-topology'),
             filteredHostData = function(data){
                 var filteredData = [],
-                    topology = (data['network-topology'] && data['network-topology'].topology) ? data['network-topology'].topology : [],
+                    topology = (data['network-topology:network-topology'] && data['network-topology:network-topology'].topology) ? data['network-topology:network-topology'].topology : [],
                     topoItem = null;
 
                 topology.some(function(topo){
