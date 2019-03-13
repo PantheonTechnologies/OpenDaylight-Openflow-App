@@ -148,3 +148,16 @@ You can use this simple Gruntfile.js
   };
 ```
 After running grunt you can access OFM standalone app via web browser typing URL http://localhost:9000.
+
+###NGINX installation
+To avoid CORS policy violation is need to install NGINX
+```
+sudo apt install nginx
+```
+then is important to switch nginx config file `/etc/nginx/sites-enabled/default`
+with default file in root of this project.
+
+NGINX is starting by command : `sudo systemctl start nginx `.
+When is need to stop NGINX: `sudo systemctl stop nginx`.
+
+After running grunt and starting NGINX you can access OFM standalone app via web browser typing URL http://localhost:9090.
