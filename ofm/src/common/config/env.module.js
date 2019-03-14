@@ -4,9 +4,9 @@ define(['angularAMD'], function(ng) {
     var config = angular.module('config', [])
         .constant('ENV', {
           baseURL: "http://127.0.0.1:",
-          adSalPort: "9090",
-          mdSalPort : "9090",
-          ofmPort : "9090",
+          adSalPort: "80",
+          mdSalPort : "80",
+          ofmPort : "80",
           configEnv : "ENV_DEV",
           odlUserName: 'admin',
           odlUserPassword: 'admin',
