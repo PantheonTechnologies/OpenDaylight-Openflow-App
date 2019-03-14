@@ -432,7 +432,7 @@ define(modules, function(openflow_manager) {
             $scope.loadTopology = function(){
                 OpenFlowManagerUtils.getTopologyData(function(topology, data){
                     $scope.topologyData = topology;
-                    $scope.flowData = (data['network-topology'].topology[0].node && data['network-topology'].topology[0].node.length) ? data['network-topology'].topology[0].node : null;
+                    $scope.flowData = (data['network-topology:network-topology'].topology[0].node && data['network-topology:network-topology'].topology[0].node.length) ? data['network-topology:network-topology'].topology[0].node : null;
 
                     if ( !topology.nodes.length ) {
                         $scope.loadStatusTopoMsgs.push('OF_FLOW_TOPO_FAIL');
