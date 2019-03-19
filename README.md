@@ -149,7 +149,7 @@ You can use this simple Gruntfile.js
 ```
 After running grunt you can access OFM standalone app via web browser typing URL http://localhost:9000.
 
-###NGINX installation
+### NGINX installation
 NGINX is used to serve as a proxy server towards OFM application and ODL/lighty RESTCONF interface
 ```
 sudo apt install nginx
@@ -160,4 +160,4 @@ with default file in root of this project.
 NGINX is starting by command : `sudo systemctl start nginx `.
 When is need to stop NGINX: `sudo systemctl stop nginx`.
 
-After running grunt and starting NGINX you can access OFM standalone app via web browser typing URL `http://localhost`.
+After running grunt and starting NGINX you can access OFM standalone app via web browser typing URL `http://127.0.0.1`.
